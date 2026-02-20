@@ -9,11 +9,6 @@ This architecture is built following the **Performance Efficiency Pillar** of th
 
 ## ☁️ Project Overview
 
-## 🏗 Architectural Diagram
-
-```html
-<img src="./Architecture.png" alt="Project Architecture" width="800"/>
-
 ### 📘 Scenario  
 CoffeeShop Manager allows coffee shop owners to manage their inventory through a fully serverless backend.  
 Using API Gateway, Lambda, DynamoDB, IAM, and CloudWatch, the system provides:
@@ -23,6 +18,13 @@ Using API Gateway, Lambda, DynamoDB, IAM, and CloudWatch, the system provides:
 - Smooth scaling under traffic spikes  
 - Minimal operational overhead  
 - A fully functional React frontend hosted on AWS Amplify  
+
+---
+
+## 🏗 Architectural Diagram
+
+---
+<img src="./Architecture.png" alt="Project Architecture" width="800"/>
 
 ---
 
@@ -87,6 +89,4 @@ You built the backend logic, API layers, and frontend integration for a complete
 
 ---
 
-
-```html
 <img src="./front-end.gif" alt="Coffee DashBoard" width="800"/>

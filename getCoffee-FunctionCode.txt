@@ -1,0 +1,67 @@
+import { docClient, GetCommand, ScanCommand, createResponse } from '/opt/utils.mjs';
+
+
+const tableName = process.env.tableName || "CoffeeShop";
+
+
+export const getCoffee = async (event) => {
+    const { pathParameters } = event;
+    const { id } = pathParameters || {};
+
+
+    try {
+        let command;
+        let isSingleItem = false;
+
+
+        if (id) {
+            isSingleItem = true;
+            command = new GetCommand({
+                TableName: tableName,
+                Key: {
+                    coffeeId: id,
+                },
+            });
+        } else {
+            command = new ScanCommand({
+                TableName: tableName,
+            });
+        }
+
+
+        const response = await docClient.send(command);
+
+
+        // 🔑 Map coffeeId → id for frontend compatibility
+        if (isSingleItem) {
+            if (!response.Item) {
+                return createResponse(404, { error: "Coffee item not found" });
+            }
+
+
+            const item = response.Item;
+            return createResponse(200, {
+                id: item.coffeeId,
+                name: item.name,
+                price: item.price,
+                available: item.available,
+            });
+        }
+
+
+        const items = (response.Items || []).map(item => ({
+            id: item.coffeeId,
+            name: item.name,
+            price: item.price,
+            available: item.available,
+        }));
+
+
+        return createResponse(200, items);
+
+
+    } catch (err) {
+        console.error("Error fetching data from DynamoDB:", err);
+        return createResponse(500, { error: err.message });
+    }
+};

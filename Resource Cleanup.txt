@@ -1,0 +1,29 @@
+Clean-up Steps
+To avoid ongoing AWS charges, remember to delete what you created:
+
+1. Amplify App
+
+Go to AWS Amplify Console
+Select your app → Actions → Delete App
+2. API Gateway
+
+Head to API Gateway Console
+Select your CoffeeShop API → Actions → Delete
+3. Lambda Functions
+
+Go to Lambda Console
+Delete all coffee-related functions: getCoffee, postCoffee, updateCoffee, deleteCoffee
+Also delete the Lambda Layer (Dynamo-Layer)
+Clean up log groups in CloudWatch Logs
+4. DynamoDB Table
+
+Go to DynamoDB Console
+Select CoffeeShop table → Actions → Delete table
+5. IAM Role (Optional)
+
+Head to IAM > Roles
+Find CoffeeShopRole and delete it along with attached policies
+6. CloudWatch Logs
+
+Go to CloudWatch > Log groups
+Delete Lambda function log groups (they have /aws/lambda/ prefix)

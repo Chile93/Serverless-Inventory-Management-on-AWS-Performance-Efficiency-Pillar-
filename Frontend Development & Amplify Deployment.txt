@@ -1,0 +1,101 @@
+Amplify Deployment Process
+Now that our backend is deployed, let’s host our CoffeeShop frontend using AWS Amplify.
+
+Step 1: Fork the Repository
+Visit: https://github.com/CrystallyRains/CoffeShop
+Click Fork (top-right corner)
+This creates a copy of the repo in your own GitHub account
+
+
+Step 2: Deploy to AWS Amplify
+
+Navigate to AWS Amplify Console
+Start New App Deployment: Click "New app" → "Host web app"
+Connect Git Provider: Select your Git provider (GitHub) > Click Next
+
+Authorize AWS Amplify to access your repositories
+Select Repository: Choose your coffee shop frontend repository
+Select Branch: main
+
+
+
+Step 3: Configure Build Settings
+App name: CoffeShop (or your preferred name)
+Build Configuration: Amplify will auto-detect your build settings.
+
+
+
+
+Step 4: Configure Environment Variables
+Add Environment Variables
+Critical Step: Your React app needs to know your API Gateway URL.
+In the App settings screen >Advanced Settings > Environment variables
+Click Add environment variable
+Add the following:
+Key: VITE_API_URL
+Value: https://your-api-id.execute-api.region.amazonaws.com
+Note: Don't include trailing slash in the URL
+
+
+Step 5: Deploy Application
+Review and Deploy: Review all configurations
+
+Click "Save and deploy"
+
+Monitor Deployment: Watch the build logs in real-time.
+
+
+Step 6: Access Your Application
+Get Your App URL
+Once deployment completes, you'll receive a URL like:
+<https://main.d1234567890.amplifyapp.com>
+This URL is automatically HTTPS-enabled
+Backed by CloudFront CDN for global performance
+
+
+
+Step 7: Configure CORS for Production
+Navigate to API Gateway Console
+AWS Console → API Gateway → CoffeeShop API
+
+
+Update CORS Configuration
+Go to Develop → CORS
+Click Configure
+Add Amplify Domain: Update your CORS settings to include your new Amplify URL:
+Access-Control-Allow-Origin:
+**<https://main.d1234567890.amplifyapp.com> (Replace with your Amplify app URL)**
+
+Access-Control-Allow-Headers:
+**Content-Type, Authorization**
+
+Access-Control-Allow-Methods:
+**GET, POST, PUT, DELETE**
+
+
+Why Deploy? CORS changes don't take effect until the API is redeployed.
+Step 8: Functional Testing
+Access Your Deployed App: Open your Amplify URL in browser
+
+Verify the app loads without errors
+Test All CRUD Operations:
+READ Operations:
+View all coffee items (GET /coffee)
+
+View individual coffee details (GET /coffee/{id})
+
+CREATE Operations:
+Add new coffee item (POST /coffee)
+
+Verify item appears in list immediately
+
+UPDATE Operations:
+Edit existing coffee item (PUT /coffee/{id})
+
+Confirm changes are saved
+
+DELETE Operations:
+Remove coffee item (DELETE /coffee/{id})
+
+
+Verify item disappears from list

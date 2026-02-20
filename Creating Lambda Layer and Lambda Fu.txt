@@ -1,0 +1,215 @@
+Step-by-Step Layer Creation:
+Navigate to Lambda Console
+Go to AWS Console → Lambda → Layers → Create Layer
+Configure Layer Details
+Name: DynamoDBLayer
+Description: "Shared DynamoDB SDK and utilities for Coffee Shop API"
+Upload Method: Upload ZIP file
+File: Upload layer.zip (contains Node.js DynamoDB dependencies)
+
+Set Runtime Configuration
+Architecture: ARM64 (more cost-effective than x86)
+Compatible Runtime: Node.js 22
+Reason: ARM64 provides up to 34% better price performance
+
+Create Layer
+Click "Create" to finalize the layer
+
+
+Part 2: Creating Lambda Functions
+We'll create four Lambda functions for complete CRUD operations:
+
+getCoffee: Retrieve coffee items from DynamoDB
+postCoffee: Add new coffee items
+updateCoffee: Modify existing coffee items
+deleteCoffee: Remove coffee items
+
+
+
+Function 1: getCoffee (Read Operation)
+Purpose
+Retrieves coffee items from DynamoDB table. Supports both getting all items and getting specific items by ID.
+
+Creation Steps:
+Basic Function Setup
+Navigate to Lambda Console → Create Function
+Option: Author from scratch
+Function Name: getCoffee
+Runtime: Node.js 22.x
+Architecture: ARM64
+
+Configure Execution Role
+Option: Use an existing role
+Role: Select CoffeeShopRole (created in previous steps)
+Why: This role has the necessary DynamoDB permissions
+
+
+Update Runtime Handler
+Navigate to Runtime Settings → Edit
+Handler: Change from index.handler to index.getCoffee
+Why: This tells Lambda which function to execute in our code
+
+Attach Layer
+Scroll to Layers section → Add a Layer
+Layer Source: Custom Layer
+Layer: DynamoDBLayer
+Version: 1
+
+Upload Function Code
+Scroll to Code Section → Replace the code with
+
+"check getCoffee function code"
+
+Click Deploy to save the code.
+
+
+
+
+Function 2: postCoffee (Create Operation)
+Purpose
+Adds new coffee items to the DynamoDB table with validation and error handling. This function handles HTTP POST requests to create new coffee entries in our inventory.
+
+Creation Steps:
+Create New Function
+Navigate to Lambda Console → Create Function
+Option: Author from scratch
+Function Name: postCoffee
+Runtime: Node.js 22.x
+Architecture: ARM64
+
+Configure Execution Role
+Option: Use an existing role
+Role: Select CoffeeShopRole
+Why: Reusing the same role ensures consistent permissions across all functions
+Click "Create Function
+
+Update Runtime Handler
+Inside the function, scroll to Runtime Settings → Click Edit
+
+Current Handler: index.handler
+New Handler: index.createCoffee
+Why: This tells Lambda to execute the postCoffee export from our index.js file
+Click Save
+
+
+Attach Lambda Layer
+Scroll to the top → Select Layers → Add a Layer
+Layer Source: Custom Layer
+Choose Layer: DynamoDBLayer
+Version: 1
+Why: This provides DynamoDB SDK and utilities
+Click Add
+
+Upload Function Code
+Scroll to Code Section → Replace the code with
+
+
+"check postCoffee Function Code"
+
+Click Deploy to save the code.
+
+
+
+
+Function 3: updateCoffee (Update Operation)
+Purpose
+Modifies existing coffee items in DynamoDB with partial update support. This function handles HTTP PUT requests to update coffee inventory details like price, availability, or description.
+
+Creation Steps:
+Create New Function
+Navigate to Lambda Console → Create Function
+Option: Author from scratch
+Function Name: updateCoffee
+Runtime: Node.js 22.x
+Architecture: ARM64
+
+Configure Execution Role
+Option: Use an existing role
+Role: Select CoffeeShopRole
+Why: Maintains consistent permissions for DynamoDB operations
+Click "Create Function"
+
+
+Update Runtime Handler
+Inside the function, scroll to Runtime Settings → Click Edit
+
+Current Handler: index.handler
+New Handler: index.updateCoffee
+Why: Points to the specific update function in our code
+Click Save
+
+
+Attach Lambda Layer
+Scroll to the top → Select Layers → Add a Layer
+Layer Source: Custom Layer
+Choose Layer: DynamoDBLayer
+Version: 1
+Why: Provides DynamoDB SDK for update operations
+Click Add
+
+
+Upload Function Code
+Scroll to Code Section → Replace the code with
+
+"check updateCoffee Function code"
+
+
+Click Deploy to save the code.
+
+
+
+
+Function 4: deleteCoffee (Delete Operation)
+Purpose
+Removes coffee items from DynamoDB with safety checks. This function handles HTTP DELETE requests to remove coffee items from the inventory, with proper validation to prevent accidental deletions.
+
+Creation Steps:
+Create New Function
+Navigate to Lambda Console → Create Function
+Option: Author from scratch
+Function Name: deleteCoffee
+Runtime: Node.js 22.x
+Architecture: ARM64
+
+Configure Execution Role
+Option: Use an existing role
+Role: Select CoffeeShopRole
+Why: Uses the same role for consistent DynamoDB permissions
+Click "Create Function"
+
+
+Update Runtime Handler
+Inside the function, scroll to Runtime Settings → Click Edit
+
+
+Current Handler: index.handler
+New Handler: index.deleteCoffee
+Why: Specifies which function to execute for delete operations
+Click Save
+
+
+Attach Lambda Layer
+Scroll to the top → Select Layers → Add a Layer
+Layer Source: Custom Layer
+Choose Layer: DynamoDBLayer
+Version: 1
+Why: Provides DynamoDB SDK for delete operations
+Click Add
+
+
+Upload Function Code
+Scroll to Code Section → Replace the code with
+
+"check deleteCoffee Function Code"
+
+
+Click Deploy to save the code.
+
+
+Summary
+At this point, you should have:
+
+1 Lambda Layer: DynamoDBLayer with shared dependencies
+4 Lambda Functions: getCoffee, postCoffee, updateCoffee, deleteCoffee
+All functions: Configured with proper handlers and IAM roles
+Layer attached: To all functions for dependency management

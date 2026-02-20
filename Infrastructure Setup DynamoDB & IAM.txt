@@ -1,0 +1,90 @@
+Step-by-Step Implementation
+
+Step 1: Create DynamoDB Table
+Navigate to AWS Console → Services → DynamoDB
+Initialize Table Creation
+Click Tables → Create table
+Configure Table Settings
+Table name: CoffeeShop
+Partition key: coffeeId (String)
+Sort key: Not required (keeps the design simple)
+Create the Table
+Leave other settings as default (AWS handles provisioning automatically)
+Click Create table
+
+
+
+
+Step 2: Add Test Data
+Why Add Test Data? Creating a sample coffee item serves multiple purposes:
+
+Validation: Confirms table structure is correct
+Testing: Provides data for API testing
+Development: Enables frontend development without empty states
+Access Table Items
+Click on CoffeeShop table name
+Navigate to Explore items
+Create Sample Coffee Item
+Click Create item
+
+Add the following attributes:
+
+{
+  "coffeeId": "c123",
+  "name": "new cold coffee",
+  "price": 456,
+  "available": true
+}
+
+
+Save the Item
+Click Create item
+Note: This test item will be returned when we make API calls, allowing us to validate the complete data flow from DynamoDB → Lambda → API Gateway → Frontend.
+
+
+
+
+Step-by-Step IAM Configuration
+Step 1: Create Base IAM Role
+Navigate to AWS Console → Services → IAM
+Initialize Role Creation
+Click Roles → Create role
+Configure Trusted EntityWhy Lambda Service? This allows our Lambda functions to assume this role and inherit its permissions.
+Trusted entity type: AWS service
+Use case: Lambda
+Step 2: Attach Basic Lambda Permissions
+Add AWS Managed PolicyWhat this policy provides:Search and select: AWSLambdaBasicExecutionRole
+
+CloudWatch Logs access (for debugging and monitoring)
+Basic Lambda execution permissions
+VPC network access (if needed in future)
+
+
+Step 4: Add DynamoDB Permissions
+Why Custom Policy? AWS managed policies are often too broad. We create a custom policy following the principle of least privilege.
+
+Create Inline Policy
+Navigate to CoffeeShopRole → Permissions policies
+Click Create inline policy
+Step 3: Create the Role
+Finalize Role CreationRole name: CoffeeShopRole
+Click Create role
+Configure DynamoDB Permissions
+Service: Select DynamoDB
+Actions: Select the following permissions:
+
+Step 5: Specify Resource Access
+Resource-Level Security
+Select Specific resources
+Copy your DynamoDB table ARN from the previous step
+
+
+Add Table ARNSecurity Benefit: This ensures Lambda functions can ONLY access our specific CoffeeShop table, not any other DynamoDB tables in the account.
+Click Add ARNs
+Paste your copied ARN
+AWS auto-populates region and table name
+
+Step 6: Finalize the Policy
+Create the PolicyClick Add ARNs → Next
+Policy name: DynamoDB-Policy
+Click Create policy

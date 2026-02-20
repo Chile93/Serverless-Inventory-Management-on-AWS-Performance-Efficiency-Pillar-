@@ -1,0 +1,161 @@
+Part 1: Creating the API Gateway
+
+Step-by-Step API Creation:
+Navigate to API Gateway ConsoleGo to AWS Console → API Gateway
+Click Create API → HTTP API → Build
+Why HTTP API: More cost-effective and performant than REST API for simple use cases
+
+Configure API DetailsAPI Name: CoffeeShop
+Description: "RESTful API for Coffee Shop inventory management"
+Why this name: Clear, descriptive, and follows naming conventions
+
+Accept Default SettingsLeave all other settings as default
+Stage: Default stage will be created automatically
+CORS: Can be configured later if needed
+Click Create
+
+
+
+
+Part 2: Creating Routes and Integrations
+
+Understanding Routes vs Integrations
+Routes: Define the URL paths and HTTP methods your API accepts
+Integrations: Connect routes to backend services (Lambda functions)
+One Integration, Multiple Routes: You can reuse integrations across different routes
+
+GET Routes Setup (Read Operations)
+Route 1: Get All Coffee Items
+Create Route
+Click Create Route
+Method: GET
+Resource Path: /coffee
+Purpose: Retrieve all coffee items from inventory
+Click Create
+
+Route 2: Get Specific Coffee Item
+Create Route
+Click Create Route
+Method: GET
+Resource Path: /coffee/{id}
+Purpose: Retrieve specific coffee item by ID
+{id}: Path parameter that will be passed to Lambda function
+Click Create
+
+
+Creating Integration for GET Routes
+Go to Integrations → Manage Integrations → Click Create
+
+Configure Integration
+Attach to Route: GET /coffee
+Integration Target: Lambda function
+Lambda Function: Select getCoffee
+Why Same Function: Our getCoffee function handles both scenarios (all items vs specific ID)
+
+Set Invoke Permissions
+Invoke Permissions: Keep enabled
+Purpose: Grants API Gateway permission to invoke your Lambda function
+Security: This creates the necessary IAM permissions automatically
+
+
+Create Integration > Click Create
+Testing the GET Integration:
+Get Invoke URL
+Go to API: CoffeeShop → Copy Invoke URL
+
+Test the Endpoint
+Open browser or API testing tool
+Navigate to: https://your-api-id.execute-api.region.amazonaws.com/coffee
+Expected Result: JSON response with coffee items
+
+Attach Integration to Second Route
+Go back to Routes → Select /coffee/{id} → Attach Integration
+Choose existing integration: getCoffee
+Click Attach Integration
+
+
+PUT Route Setup (Update Operations)
+Purpose
+Handle HTTP PUT requests to update existing coffee items.
+
+Creation Steps:
+Create PUT Route
+Go to API Gateway → Routes → Click Create Route
+Method: PUT
+Resource Path: /coffee/{id}
+Purpose: Update specific coffee item by ID
+Click Create
+
+Create PUT Integration
+Go to Integrations → Manage Integrations → Click Create
+
+
+Configure PUT Integration
+Attach to Route: PUT /coffee/{id}
+Integration Target: Lambda function
+Lambda Function: Select updateCoffee
+Why Separate Function: Update operations require different logic than read operations
+
+
+Set Invoke Permissions
+Invoke Permissions: Keep enabled
+Purpose: Allows API Gateway to invoke the updateCoffee function
+Click Create
+
+
+DELETE Route Setup (Delete Operations)
+Purpose
+Handle HTTP DELETE requests to remove coffee items from inventory.
+
+Creation Steps:
+Create DELETE Route
+Go to API Gateway → Routes → Click Create Route
+Method: DELETE
+Resource Path: /coffee/{id}
+Purpose: Remove specific coffee item by ID
+Click Create
+
+Create DELETE Integration
+Go to Integrations → Manage Integrations → Click Create
+
+
+Configure DELETE Integration
+Attach to Route: DELETE /coffee/{id}
+Integration Target: Lambda function
+Lambda Function: Select deleteCoffee
+Why Separate Function: Delete operations require validation and safety checks
+
+
+Set Invoke Permissions
+Invoke Permissions: Keep enabled
+Purpose: Grants API Gateway permission to invoke the deleteCoffee function
+Click Create
+
+
+Set Invoke Permissions
+Invoke Permissions: Keep enabled
+Purpose: Grants API Gateway permission to invoke the deleteCoffee function
+Click Create
+
+
+
+POST Route Setup (Create Operations)
+Purpose
+Handle HTTP POST requests to create new coffee items in the inventory.
+
+Creation Steps:
+Create POST Route
+Go to API Gateway → Routes → Click Create Route
+Method: POST
+Resource Path: /coffee
+Purpose: Create new coffee item (no ID needed as it will be generated)
+Click Create
+
+
+Create POST Integration
+Go to Integrations → Manage Integrations → Click Create
+Attach to Route: POST /coffee
+Integration Target: Lambda function
+Lambda Function: Select postCoffee
+Invoke Permissions: Keep enabled
+Click Create
